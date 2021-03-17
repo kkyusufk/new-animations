@@ -1,5 +1,6 @@
 import * as React from 'react';
-import icon from '../images/example.jpg'
+import example from '../images/example.jpg'
+import icon from '../images/icon.png'
 
 const links = ['home', 'about', 'contact', 'career', 'blog', 'work']
 
@@ -18,11 +19,12 @@ const childrenLink = {
 
 const random = {
   display: 'none',
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
-  width: 60,
-  height: 40,
-  border: '1px solid black'
+  width: 100,
+  height: 60,
+  transform: 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)',
+  transformStyle: 'preserve-3d'
 }
 
 const image = {
@@ -32,25 +34,39 @@ const image = {
 }
 
 const previewImages = (elem) => {
+  console.log(elem)
   const random = document.getElementById("random");
-  random.style.willChange = 'display, transform'
-  random.style.display = 'block'
+  random.style.willChange = 'opacity, transform'
+  random.style.display = 'flex'
+  imageRotate(document.getElementById("randomImg"), 0)
 }
 
 const removePreview = (elem) => {
   const random = document.getElementById("random");
   random.style.willChange = 'auto'
   random.style.display = 'none'
+  clearInterval(interval);
 }
 
 const moveImage = (event) => {
-  const random = document.getElementById("random");
+  const random = document.getElementById("randomImg");
   const X = event.clientX;
   const Y = event.clientY;
-  random.style.transform = `translate(${X}px, ${Y}px)`
+  random.style.transform = `translate3d(${X}px, ${Y}px, 0px)`
 }
 
-const hoverLinks = () => (
+let interval;
+
+const imageRotate = (random, index) => {
+  let images = [example, icon];
+  interval = setInterval(() => {
+    random.src = images[index];
+    index++
+    if (index > images.length - 1) index = 0;
+  }, 500);
+}
+
+const hoverLinks = () => (  
   <main>
     <div className="links" style={linksStyle}>
       {links.map((link, key) => 
@@ -67,7 +83,7 @@ const hoverLinks = () => (
       }
     </div>
     <div id="random" style={random}>
-      <img src={icon} style={image} />
+      <img id="randomImg" src={example} style={image} />
     </div>
   </main>
 )
