@@ -14,13 +14,15 @@ const childrenLink = {
   height: '100px',
   display: 'grid',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
+  cursor: 'pointer'
 }
 
 const random = {
   display: 'none',
   position: 'fixed',
   top: 0,
+  zIndex: -1,
   width: 100,
   height: 60,
   transform: 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)',
@@ -30,15 +32,20 @@ const random = {
 const image = {
   width: '100%',
   height: '100%',
-  objectFit: 'cover'
+  objectFit: 'cover',
 }
+
+let firstMouseEnter = true;
 
 const previewImages = (elem) => {
   console.log(elem)
   const random = document.getElementById("random");
   random.style.willChange = 'opacity, transform'
   random.style.display = 'flex'
-  imageRotate(document.getElementById("randomImg"), 0)
+  if(firstMouseEnter) {
+    imageRotate(document.getElementById("randomImg"), 0)
+    firstMouseEnter = false;
+  }
 }
 
 const removePreview = (elem) => {
@@ -50,8 +57,8 @@ const removePreview = (elem) => {
 
 const moveImage = (event) => {
   const random = document.getElementById("randomImg");
-  const X = event.clientX;
-  const Y = event.clientY;
+  const X = event.clientX - 40;
+  const Y = event.clientY - 20;
   random.style.transform = `translate3d(${X}px, ${Y}px, 0px)`
 }
 
@@ -76,6 +83,7 @@ const hoverLinks = () => (
           onMouseEnter={previewImages}
           onMouseLeave={removePreview}
           onMouseMove={moveImage}
+          onMouseOut={() => firstMouseEnter = true}
           >
             {link}
         </div>
