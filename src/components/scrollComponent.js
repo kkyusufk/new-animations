@@ -15,18 +15,6 @@ const animatingDiv = {
   minHeight: '80vh'
 }
 
-const getScrollDirection = () => {
-  let scrollPos = 0;
-  let direction = 'DOWN';
-  if ((document.body.getBoundingClientRect()).top > scrollPos)
-		direction = 'UP';
-	else
-		direction = 'DOWN';
-	// saves the new position for iteration.
-  scrollPos = (document.body.getBoundingClientRect()).top;
-  return direction;
-}
-
 export const ScrollComponent = () => {
 
   const animatingDivElement = useRef();
@@ -65,17 +53,24 @@ export const ScrollComponent = () => {
       const { style } = animatingPara.current;
       entries.forEach((entry) => {
         const currentY = entry.boundingClientRect.y;
-        console.log(currentY, prevY, Y)
         if (entry.intersectionRatio > prevRatio) {
+          console.log(entry.target.clientHeight - animatingPara.current.clientHeight, Y)
+          console.log(currentY, prevY)
           // this if will prevent the para to go out of the parent div.
           if (Y < (entry.target.clientHeight - animatingPara.current.clientHeight) && Y >= 0) {
             if (currentY < prevY) {
               console.log('down');
               style.transform = `translateY(${Y}px)`;
               Y += 30;
-            } else if (currentY > prevY) {
+            } else {
               console.log('up');
               style.transform = `translateY(${Y}px)`;
+              Y -= 30;
+            }
+          } else {
+            if (Math.sign(Y) === -1) {
+              Y = 0;
+            } else {
               Y -= 30;
             }
           }
@@ -84,7 +79,7 @@ export const ScrollComponent = () => {
         prevRatio = entry.intersectionRatio;
       });
     }
-
+    console.log('USE-EFFECT')
     // provide the observer with a target
     observer.observe(animatingDivElement.current);
 
