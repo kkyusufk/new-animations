@@ -24,6 +24,7 @@ export const ScrollComponent = () => {
     let prevRatio = 0.0;
     let prevY = 0;
     let Y = 0;
+    
     function buildThresholdList() {
       let thresholds = [];
       let numSteps = 50;
@@ -54,24 +55,21 @@ export const ScrollComponent = () => {
       entries.forEach((entry) => {
         const currentY = entry.boundingClientRect.y;
         if (entry.intersectionRatio > prevRatio) {
-          console.log(entry.target.clientHeight - animatingPara.current.clientHeight, Y)
-          console.log(currentY, prevY)
-          // this if will prevent the para to go out of the parent div.
+          console.log('inside')
+          // this will prevent the para to go out of the parent div.
           if (Y < (entry.target.clientHeight - animatingPara.current.clientHeight) && Y >= 0) {
             if (currentY < prevY) {
-              console.log('down');
               style.transform = `translateY(${Y}px)`;
-              Y += 30;
+              Y += 10;
             } else {
-              console.log('up');
               style.transform = `translateY(${Y}px)`;
-              Y -= 30;
+              Y -= 10;
             }
           } else {
             if (Math.sign(Y) === -1) {
               Y = 0;
             } else {
-              Y -= 30;
+              Y -= 10;
             }
           }
         }
@@ -79,7 +77,6 @@ export const ScrollComponent = () => {
         prevRatio = entry.intersectionRatio;
       });
     }
-    console.log('USE-EFFECT')
     // provide the observer with a target
     observer.observe(animatingDivElement.current);
 
