@@ -16,18 +16,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  content: "";
+  content: '';
   opacity: 0;
   z-index: -1;
-  transition: opacity 2s ease;
-  background: linear-gradient(
-    226deg,
-    #fed8ff,
-    #f9d9c1,
-    #d0e5fb,
-    #fff7c9,
-    #dffcd1
-  );
+  transition: opacity 1s ease;
+  background: linear-gradient(226deg, #fed8ff, #f9d9c1, #d0e5fb, #fff7c9, #dffcd1);
   animation: gradientEffect 10s ease infinite;
   background-size: 600% 600%;
 }
