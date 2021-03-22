@@ -13,7 +13,8 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "prettier": "prettier --ext .js"
+    "prettier": "prettier './src/**/*.{js,ts}' --check",
+    "prettier:fix": "prettier './src/**/*.{js,ts}' --write"
   },
   "dependencies": {
     "gatsby": "^3.0.1",
