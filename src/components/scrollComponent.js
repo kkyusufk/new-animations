@@ -27,7 +27,7 @@ export const ScrollComponent = () => {
   let Y = 0;
   let lastScrollPos = 0;
 
-  window.addEventListener('scroll', () => {
+  typeof window !== `undefined` && window.addEventListener('scroll', () => {
     if (!isElementInViewport(animatingDivElement.current)) {
       const { style } = animatingPara.current;
       if (document.body.getBoundingClientRect().top > lastScrollPos) {
