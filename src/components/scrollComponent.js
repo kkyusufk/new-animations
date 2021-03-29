@@ -15,14 +15,35 @@ const animatingDiv = {
   minHeight: '80vh',
 };
 
+function isElementInViewport(el) {
+  var rect = el.getBoundingClientRect();
+
+  return rect.top <= window.innerHeight && rect.bottom >= 0.0;
+}
+
 export const ScrollComponent = () => {
   const animatingDivElement = useRef();
   const animatingPara = useRef();
+  let Y = 0;
+  let lastScrollPos = 0;
+
+  window.addEventListener('scroll', () => {
+    if (!isElementInViewport(animatingDivElement.current)) {
+      const { style } = animatingPara.current;
+      if (document.body.getBoundingClientRect().top > lastScrollPos) {
+        style.transform = `translate(267px)`;
+        Y = 267;
+      } else {
+        style.transform = `translate(0px)`;
+        Y = 0;
+      }
+      lastScrollPos = document.body.getBoundingClientRect().top;
+    }
+  });
 
   useEffect(() => {
     let prevRatio = 0.0;
     let prevY = 0;
-    let Y = 0;
 
     function buildThresholdList() {
       let thresholds = [];
@@ -50,22 +71,18 @@ export const ScrollComponent = () => {
       const { style } = animatingPara.current;
       entries.forEach((entry) => {
         const currentY = entry.boundingClientRect.y;
+        const maxScrollHeight = entry.target.clientHeight - animatingPara.current.clientHeight;
         if (entry.intersectionRatio > prevRatio) {
-          console.log('inside');
           // this will prevent the para to go out of the parent div.
-          if (Y < entry.target.clientHeight - animatingPara.current.clientHeight && Y >= 0) {
+          if (Y <= maxScrollHeight && Y >= 0) {
             if (currentY < prevY) {
               style.transform = `translateY(${Y}px)`;
-              Y += 10;
+              Y += 50;
+              if (Y > maxScrollHeight) Y = maxScrollHeight;
             } else {
               style.transform = `translateY(${Y}px)`;
-              Y -= 10;
-            }
-          } else {
-            if (Math.sign(Y) === -1) {
-              Y = 0;
-            } else {
-              Y -= 10;
+              Y -= 50;
+              if (Y < 0) Y = 0;
             }
           }
         }
